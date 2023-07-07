@@ -1,0 +1,72 @@
+goal([1,2,3,4,0,5,6,7,8]).
+% move empty spot left in the top row
+move([P1,0,P3, P4,P5,P6, P7,P8,P9],
+[0,P1,P3, P4,P5,P6, P7,P8,P9]).
+move([P1,P2,0, P4,P5,P6, P7,P8,P9],
+[P1,0,P2, P4,P5,P6, P7,P8,P9]).
+% move empty spot left in the middle row
+move([P1,P2,P3, P4,0,P6, P7,P8,P9],
+[P1,P2,P3, 0,P4,P6, P7,P8,P9]).
+move([P1,P2,P3, P4,P5,0, P7,P8,P9],
+[P1,P2,P3, P4,0,P5, P7,P8,P9]).
+% move empty spot left in the bottom row
+move([P1,P2,P3, P4,P5,P6, P7,0,P9],
+[P1,P2,P3, P4,P5,P6, 0,P7,P9]).
+move([P1,P2,P3, P4,P5,P6, P7,P8,0],
+[P1,P2,P3, P4,P5,P6, P7,0,P8]).
+% move empty spot right in the top row
+move([0,P2,P3, P4,P5,P6, P7,P8,P9],
+[P2,0,P3, P4,P5,P6, P7,P8,P9]).
+move([P1,0,P3, P4,P5,P6, P7,P8,P9],
+[P1,P3,0, P4,P5,P6, P7,P8,P9]).
+% move empty spot right in the middle row
+move([P1,P2,P3, 0,P5,P6, P7,P8,P9],
+[P1,P2,P3, P5,0,P6, P7,P8,P9]).
+move([P1,P2,P3, P4,0,P6, P7,P8,P9],
+[P1,P2,P3, P4,P6,0, P7,P8,P9]).
+% move empty spot RIGHT in the bottom row
+move([P1,P2,P3, P4,P5,P6, 0,P8,P9],
+[P1,P2,P3, P4,P5,P6, P8,0,P9]).
+move([P1,P2,P3, P4,P5,P6, P7,0,P9],
+[P1,P2,P3, P4,P5,P6, P7,P9,0]).
+% move empty spot UP FROM the middle row
+move([P1,P2,P3, 0,P5,P6, P7,P8,P9],
+[0,P2,P3, P1,P5,P6, P7,P8,P9]).
+move([P1,P2,P3, P4,0,P6, P7,P8,P9],
+[P1,0,P3, P4,P2,P6, P7,P8,P9]).
+move([P1,P2,P3, P4,P5,0, P7,P8,P9],
+[P1,P2,0, P4,P5,P3, P7,P8,P9]).
+
+% move empty spot UP FROM the bottom row
+move([P1,P2,P3, P4,P5,P6, P7,0,P9],
+[P1,P2,P3, P4,0,P6, P7,P5,P9]).
+move([P1,P2,P3, P4,P5,P6, P7,P8,0],
+[P1,P2,P3, P4,P5,0, P7,P8,P6]).
+move([P1,P2,P3, P4,P5,P6, 0,P8,P9],
+[P1,P2,P3, 0,P5,P6, P4,P8,P6]).
+% move empty spot DOWN FROM in the top row
+move([0,P2,P3, P4,P5,P6, P7,P8,P9],
+[P4,P2,P3, 0,P5,P6, P7,P8,P9]).
+move([P1,0,P3, P4,P5,P6, P7,P8,P9],
+[P1,P5,P3, P4,0,P6, P7,P8,P9]).
+move([P1,P2,0, P4,P5,P6, P7,P8,P9],
+[P1,P2,P6, P4,P5,0, P7,P8,P9]).
+% move empty spot DOWN FROM the middle row
+move([P1,P2,P3, 0,P5,P6, P7,P8,P9],
+[P1,P2,P3, P7,P5,P6, 0,P8,P9]).
+move([P1,P2,P3, P4,0,P6, P7,P8,P9],
+[P1,P2,P3, P4,P8,P6, P7,0,P9]). 
+move([P1,P2,P3, P4,P5,0, P7,P8,P9],
+[P1,P2,P3, P4,P5,P9, P7,P8,0]).
+dfsSimplest(S, [S]) :- goal(S).
+dfsSimplest(S, [S|Rest]) :-
+move(S, S2),
+dfsSimplest(S2, Rest).
+dfs(S, Path, Path) :- goal(S).
+dfs(S,Checked,Path) :-
+% Let us try for a move
+move(S,S2),
+% ensure the resulting state is a new state
+\+member(S2,Checked),
+% and that this state leads to the goal
+dfs(S2, [S2|Checked], Path).

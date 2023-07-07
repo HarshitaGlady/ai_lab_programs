@@ -1,0 +1,27 @@
+city(a).
+city(b).
+city(c).
+city(d).
+
+distance(a, b, 10).
+distance(a, c, 15).
+distance(a, d, 20).
+distance(b, c, 35).
+distance(b, d, 25).
+distance(c, d, 30).
+
+tsp(Path, Cost) :-
+    findall(City, city(City), Cities),
+    permutation(Cities, Path),
+    calculate_cost(Path, Cost).
+
+calculate_cost([City1, City2 | Rest], Cost) :-
+    distance(City1, City2, Distance),
+    calculate_cost([City2 | Rest], PartialCost),
+    Cost is PartialCost + Distance.
+
+calculate_cost([_], 0).
+min_list([Min], Min).
+min_list([Head|Tail], Min) :-
+    min_list(Tail, Temp),
+    (Head < Temp, Min = Head ; Min = Temp).
